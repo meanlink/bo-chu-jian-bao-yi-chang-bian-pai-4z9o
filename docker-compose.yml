@@ -47,8 +47,8 @@ services:
       start_period: 15s
   worker:
     build: ./backend
-    container_name: ${COMPOSE_PROJECT_NAME:-bulletin-ewma}-worker
     command: ["python", "-m", "src.worker"]
+    deploy: {replicas: 2}
     environment: *app-env
     volumes: ["analysis-artifacts:/artifacts"]
     depends_on:

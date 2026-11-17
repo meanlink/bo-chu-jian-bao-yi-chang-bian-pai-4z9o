@@ -1,4 +1,4 @@
-from sqlalchemy import String, JSON, Double, ForeignKey, Boolean
+from sqlalchemy import String, JSON, Double, ForeignKey, Boolean, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 from src.config.database import Base
 class Job(Base):
@@ -14,3 +14,9 @@ class Job(Base):
     created_by: Mapped[int] = mapped_column(ForeignKey('users.id'))
     created_at: Mapped[float] = mapped_column(Double)
     finished_at: Mapped[float | None] = mapped_column(Double, nullable=True)
+    lease_token: Mapped[str] = mapped_column(String(64), default='')
+    worker_id: Mapped[str] = mapped_column(String(120), default='')
+    lease_expires_at: Mapped[float | None] = mapped_column(Double, nullable=True)
+    claimed_at: Mapped[float | None] = mapped_column(Double, nullable=True)
+    attempts: Mapped[int] = mapped_column(Integer, default=0)
+    takeover_reason: Mapped[str] = mapped_column(String(300), default='')

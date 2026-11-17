@@ -1,7 +1,5 @@
 import time
 from fastapi import HTTPException
-from redis import Redis
-from src.config.settings import REDIS_URL
 from src.models import Dataset, Job
 from src.services.business import metadata
 def create(db, data, user):
@@ -23,8 +21,3 @@ def create(db, data, user):
     j=Job(name=data.name, dataset_id=data.dataset_id, params=params, created_by=user.id, created_at=time.time(), status='queued')
     db.add(j); db.flush()
     return j
-def enqueue(job_id):
-    try:
-        r=Redis.from_url(REDIS_URL); r.rpush('analysis:queue',job_id); r.close()
-    except Exception:
-        pass # SQL queued status is the durable fallback
